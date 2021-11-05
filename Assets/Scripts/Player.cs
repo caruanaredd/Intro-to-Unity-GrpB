@@ -12,6 +12,14 @@ public class Player : MonoBehaviour
     [SerializeField]
     private float m_Speed = 3.5f;
 
+    [SerializeField]
+    private Transform m_LaserPrefab;
+
+    [SerializeField]
+    private float m_FireRate = 0.5f;
+
+    private float m_NextFire = -1f;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -23,6 +31,14 @@ public class Player : MonoBehaviour
     void Update()
     {
         CalculateMovement();
+
+        // if I hit the space key and can fire
+        // spawn laser
+        // set the next fire time
+        if (Input.GetKeyDown(KeyCode.Space) && Time.time > m_NextFire)
+        {
+            FireLaser();
+        }
     }
 
     // Calculates the player movement.
@@ -68,5 +84,15 @@ public class Player : MonoBehaviour
         {
             transform.position = new Vector3(11f, transform.position.y, 0);
         }
+    }
+
+    // Fires a laser.
+    void FireLaser()
+    {
+        // offset the laser by 0.8 on Y
+        Vector3 offset = new Vector3(0, 0.8f, 0);
+        Instantiate(m_LaserPrefab, transform.position + offset, Quaternion.identity);
+
+        m_NextFire = Time.time + m_FireRate;
     }
 }
