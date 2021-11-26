@@ -23,7 +23,11 @@ public class Player : MonoBehaviour
     [SerializeField]
     private int m_Lives = 3;
 
+    private int m_Score = 0;
+
     private SpawnManager m_SpawnManager;
+
+    private UIManager m_UIManager;
 
     // Start is called before the first frame update
     void Start()
@@ -36,6 +40,12 @@ public class Player : MonoBehaviour
         if (m_SpawnManager == null)
         {
             Debug.LogWarning("Spawn Manager is missing!");
+        }
+
+        m_UIManager = GameObject.Find("Canvas").GetComponent<UIManager>();
+        if (m_UIManager == null)
+        {
+            Debug.LogWarning("UI Manager is missing!");
         }
     }
 
@@ -79,22 +89,22 @@ public class Player : MonoBehaviour
         {
             transform.position = new Vector3(transform.position.x, 0, 0);
         }
-        else if (transform.position.y < -3.8f)
+        else if (transform.position.y < -2.8f)
         {
-            transform.position = new Vector3(transform.position.x, -3.8f, 0);
+            transform.position = new Vector3(transform.position.x, -2.8f, 0);
         }
 
         // if player position on X > 11
         // player position on X = -11
         // else if player position on X < -11
         // player position on X = 11
-        if (transform.position.x > 11f)
+        if (transform.position.x > 9.5f)
         {
-            transform.position = new Vector3(-11f, transform.position.y, 0);
+            transform.position = new Vector3(-9.5f, transform.position.y, 0);
         }
-        else if (transform.position.x < -11f)
+        else if (transform.position.x < -9.5f)
         {
-            transform.position = new Vector3(11f, transform.position.y, 0);
+            transform.position = new Vector3(9.5f, transform.position.y, 0);
         }
     }
 
@@ -115,6 +125,7 @@ public class Player : MonoBehaviour
         m_Lives -= 1;
         // m_Lives = m_Lives - 1;
         // m_Lives--;
+        m_UIManager.UpdateLives(m_Lives);
 
         // if player is dead
         // destroy us
@@ -122,8 +133,15 @@ public class Player : MonoBehaviour
         {
             // Communicate with spawn manager
             // tell it to stop.
+            m_UIManager.GameOver();
             m_SpawnManager.OnPlayerDeath();
             Destroy(gameObject);
         }
+    }
+
+    public void AddScore()
+    {
+        m_Score += 10;
+        m_UIManager.UpdateScore(m_Score);
     }
 }
