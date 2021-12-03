@@ -17,6 +17,9 @@ public class UIManager : MonoBehaviour
     [SerializeField]
     private GameObject m_GameOver;
 
+    [SerializeField]
+    private GameObject m_RestartText;
+
     // function - update the score
     public void UpdateScore(int score)
     {
@@ -33,6 +36,7 @@ public class UIManager : MonoBehaviour
     public void GameOver()
     {
         m_GameOver.SetActive(true);
+        m_RestartText.SetActive(true);
         StartCoroutine(GameOverRoutine());
     }
 

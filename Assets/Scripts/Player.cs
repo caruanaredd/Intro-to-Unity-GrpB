@@ -29,6 +29,8 @@ public class Player : MonoBehaviour
 
     private UIManager m_UIManager;
 
+    private GameManager m_GameManager;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -46,6 +48,12 @@ public class Player : MonoBehaviour
         if (m_UIManager == null)
         {
             Debug.LogWarning("UI Manager is missing!");
+        }
+
+        m_GameManager = GameObject.Find("Game Manager").GetComponent<GameManager>();
+        if (m_GameManager == null)
+        {
+            Debug.LogWarning("Game Manager is missing!");
         }
     }
 
@@ -135,6 +143,7 @@ public class Player : MonoBehaviour
             // tell it to stop.
             m_UIManager.GameOver();
             m_SpawnManager.OnPlayerDeath();
+            m_GameManager.GameOver();
             Destroy(gameObject);
         }
     }
