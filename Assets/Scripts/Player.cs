@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class Player : MonoBehaviour
 {
@@ -24,6 +25,8 @@ public class Player : MonoBehaviour
     private int m_Lives = 3;
 
     private int m_Score = 0;
+
+    private Vector2 direction = Vector2.zero;
 
     private SpawnManager m_SpawnManager;
 
@@ -61,25 +64,17 @@ public class Player : MonoBehaviour
     void Update()
     {
         CalculateMovement();
-
-        // if I hit the space key and can fire
-        // spawn laser
-        // set the next fire time
-        if (Input.GetKeyDown(KeyCode.Space) && Time.time > m_NextFire)
-        {
-            FireLaser();
-        }
     }
 
     // Calculates the player movement.
     void CalculateMovement()
     {
         // get the horizontal input from the Input Manager.
-        float horizontal = Input.GetAxis("Horizontal");
-        float vertical = Input.GetAxis("Vertical");
+        // float horizontal = Input.GetAxis("Horizontal");
+        // float vertical = Input.GetAxis("Vertical");
 
         // More efficient version of the code below.
-        Vector3 direction = new Vector3(horizontal, vertical);
+        // Vector3 direction = new Vector3(horizontal, vertical);
         transform.Translate(direction * m_Speed * Time.deltaTime);
 
         // Move the player 1 on the X axis every frame.
@@ -117,8 +112,11 @@ public class Player : MonoBehaviour
     }
 
     // Fires a laser.
-    void FireLaser()
+    void OnShoot()
     {
+        // stops the firing if the timer hasn't run out
+        if (Time.time < m_NextFire) return;
+        
         // offset the laser by 0.8 on Y
         Vector3 offset = new Vector3(0, 0.8f, 0);
         Instantiate(m_LaserPrefab, transform.position + offset, Quaternion.identity);
@@ -152,5 +150,10 @@ public class Player : MonoBehaviour
     {
         m_Score += 10;
         m_UIManager.UpdateScore(m_Score);
+    }
+
+    void OnMovement(InputValue value)
+    {
+        direction = value.Get<Vector2>();
     }
 }

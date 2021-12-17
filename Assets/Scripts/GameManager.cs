@@ -7,10 +7,9 @@ public class GameManager : MonoBehaviour
 {
     private bool m_IsGameOver = false;
 
-    // Update is called once per frame
-    void Update()
+    void OnRestart()
     {
-        if (Input.GetKeyDown(KeyCode.R) && m_IsGameOver == true)
+        if (m_IsGameOver == true)
         {
             // reload the scene
             SceneManager.LoadScene("Game");
