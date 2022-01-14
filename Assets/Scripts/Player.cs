@@ -28,6 +28,8 @@ public class Player : MonoBehaviour
 
     private Vector2 direction = Vector2.zero;
 
+    private PlayerInput m_Input;
+
     private SpawnManager m_SpawnManager;
 
     private UIManager m_UIManager;
@@ -39,6 +41,8 @@ public class Player : MonoBehaviour
     {
         // take the current player position, and set it to [0, 0, 0]
         transform.position = new Vector3(0, 0, 0);
+
+        m_Input = GetComponent<PlayerInput>();
 
         // look for the spawn manager and keep a reference.
         m_SpawnManager = GameObject.Find("Spawn Manager").GetComponent<SpawnManager>();
@@ -58,6 +62,7 @@ public class Player : MonoBehaviour
         {
             Debug.LogWarning("Game Manager is missing!");
         }
+        m_GameManager.AddPlayer();
     }
 
     // Update is called once per frame
@@ -131,7 +136,7 @@ public class Player : MonoBehaviour
         m_Lives -= 1;
         // m_Lives = m_Lives - 1;
         // m_Lives--;
-        m_UIManager.UpdateLives(m_Lives);
+        m_UIManager.UpdateLives(m_Input.playerIndex, m_Lives);
 
         // if player is dead
         // destroy us
@@ -139,8 +144,6 @@ public class Player : MonoBehaviour
         {
             // Communicate with spawn manager
             // tell it to stop.
-            m_UIManager.GameOver();
-            m_SpawnManager.OnPlayerDeath();
             m_GameManager.GameOver();
             Destroy(gameObject);
         }
@@ -149,7 +152,7 @@ public class Player : MonoBehaviour
     public void AddScore()
     {
         m_Score += 10;
-        m_UIManager.UpdateScore(m_Score);
+        m_UIManager.UpdateScore(m_Input.playerIndex, m_Score);
     }
 
     void OnMovement(InputValue value)

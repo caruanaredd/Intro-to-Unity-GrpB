@@ -6,10 +6,10 @@ using UnityEngine.UI;
 public class UIManager : MonoBehaviour
 {
     [SerializeField]
-    private Text m_ScoreText;
+    private Text[] m_ScoreText;
 
     [SerializeField]
-    private Image m_LivesImage;
+    private Image[] m_LivesImage;
 
     [SerializeField]
     private Sprite[] m_LivesSprites;
@@ -21,16 +21,16 @@ public class UIManager : MonoBehaviour
     private GameObject m_RestartText;
 
     // function - update the score
-    public void UpdateScore(int score)
+    public void UpdateScore(int playerID, int score)
     {
-        m_ScoreText.text = $"Score: {score}";
+        m_ScoreText[playerID].text = $"Score: {score}";
     }
 
-    public void UpdateLives(int lives)
+    public void UpdateLives(int playerID, int lives)
     {
         // access the sprite on the image
         // change it to the correct sprite
-        m_LivesImage.sprite = m_LivesSprites[lives];
+        m_LivesImage[playerID].sprite = m_LivesSprites[lives];
     }
 
     public void GameOver()
